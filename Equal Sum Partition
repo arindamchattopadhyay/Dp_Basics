@@ -1,0 +1,71 @@
+For a given array, we need to check whether an array can be divided into two equal parts. The array i.e{1,5,11,5} can be divide into
+two parts:-- {1,5,5},{11}
+Thus the O/p= TRUE
+
+Approach:-- At first, we need to see whether the sum of the array is divisble by 2. If yes then only we will continue otherwise there is 
+no chance of equal partition. Eg:- 22 can be divided into 11 and 11 but  21 will be 10 and 11(i.e unequal).
+
+Now if the sum is even , does not mean equal partition must occur.
+For example, {9,9,3,2,3} can be divided with Equal Sum because,
+Sum=9+9+3+2+3=26
+
+So, if we want equal partition, we need to check whether an array with subset sum=intial sum(i.e 26 in this case)/2 =13 exist or not.
+We don't have any such subset in {9,9,3,2,3}.
+Thus the O/p= FALSE
+
+Code:--
+
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+			Scanner sc=new Scanner(System.in);
+	int n=sc.nextInt();
+	int a[]=new int[n];
+	int sum=0;
+	for(int i=0;i<n;i++) {
+		a[i]=sc.nextInt();
+		sum+=a[i];}
+	
+	if(isEqual_Sum_PartitonPossible(a,sum))
+		System.out.println(true);
+	else
+		System.out.println(false);
+	}
+static boolean isEqual_Sum_PartitonPossible(int a[],int sum)
+{
+	if(sum%2!=0)
+		return false;
+	else
+		return (Subset_Sum_possible_or_Not(a,sum/2));
+}
+//Now if the sum is even , does not mean equal partition must occur.
+static boolean Subset_Sum_possible_or_Not(int a[],int sum)
+{
+	boolean dp[][]=new boolean[a.length+1][sum+1];
+	
+	for(int i=0;i<=a.length;i++)
+	{
+		for(int j=0;j<=sum;j++)
+		{
+			if(i==0)
+				dp[i][j]=false;
+			else if(j==0)
+				dp[i][j]=true;
+			else if(a[i-1]<=j)
+				dp[i][j]=dp[i-1][j-a[i-1]]||dp[i-1][j];
+			else
+				dp[i][j]=dp[i-1][j];
+		}
+	}
+	return dp[a.length][sum];
+}
+}
+
